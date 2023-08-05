@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ExtremeSports2.Data.Entities.Country>
+
+<flash dismissable="true" />
+
+
+<table class="table table-striped table-responsive-md table-bordered smfont" id="CountriesTable">
+    <colgroup>
+        <col span="1" />
+        <col span="1" />
+        <col span="1" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                numero de estados
+            </th>
+            <th>
+                numero de ciudades
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-controller="Countries" asp-route-Id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                  5
+                </td>
+                <td>
+                    5
+                </td>
+                <td>
+                @*    <a asp-action="AddOrEdit" class="primary-button-modal"><i class="ri-add-circle-fill"></i></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="secondary-button-modal"><i class="ri-pencil-fill "></i></a>
+   
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="tercery-button-modal"><i class="ri-delete-bin-2-fill"></i></a>*@
+                    <a onclick="showInPopup('@Url.Action("AddOrEdit", "Countries", new { id = 0 }, Context.Request.Scheme)' , 'Nuevo País')" class="icon_add hero__cta"> <i class="ri-add-circle-fill"></i></a>
+                   @* <a  class="primary-button-modal hero__cta"><i class="ri-add-circle-fill"></i></a>*@
+                    <a onclick="showInPopup('@Url.Action("AddOrEdit", "Countries", new { id = item.Id }, Context.Request.Scheme)' , 'Actualizar País')" class="icon_edit"><i class="ri-pencil-fill "></i> </a>
+                    <a data-id="@item.Id" class="icon_delete deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="ri-delete-bin-2-fill"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

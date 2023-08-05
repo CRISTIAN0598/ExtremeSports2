@@ -164,17 +164,17 @@ divTrigger.addEventListener('click', () => {
 })
 
 //close by click outside
-document.addEventListener('click', (e) => {
-    const isClosest = e.target.closest(divtoShow);
-    if (!isClosest && divPopup.classList.contains('show')) {
-        divPopup.classList.remove('show')
-    }
-})
+//document.addEventListener('click', (e) => {
+//    const isClosest = e.target.closest(divtoShow);
+//    if (!isClosest && divPopup.classList.contains('show')) {
+//        divPopup.classList.remove('show')
+//    }
+//})
 
   //Show modal on load
   // window.onload= function(){
   // document.querySelector('.site').classList.toggle('showmodal')
   // }
-  // document.querySelector('.modalclose').addEventListener('click', function(){
-  //     document.querySelector('.site').classList.remove('showmodal')
-  // })
+   //document.querySelector('.modalclose').addEventListener('click', function(){
+   //    document.querySelector('.site').classList.remove('showmodal')
+   //})

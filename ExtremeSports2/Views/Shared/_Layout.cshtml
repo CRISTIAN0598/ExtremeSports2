@@ -5,7 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+   @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
 
@@ -162,7 +166,7 @@
                                                             <ul>
                                                                 <li><a href="">Categorías</a></li>
                                                                 <li><a href="">Productos</a></li>
-                                                                <li><a href="">Países</a></li>
+                                                                <li><a  asp-area="" asp-controller="Countries" asp-action="Index">Países</a></li>
                                                               
                                                             </ul>
                                                         </div>
@@ -657,7 +661,7 @@
             </div>
         </footer>
         <!--Footer-->
-        <div id="modal" class="modal">
+       @* <div id="modal" class="modal">
             <div class="content flexcol">
                 <div class="image object-cover">
                     <img src="assets/products/apparel4.jpg" alt="">
@@ -674,7 +678,7 @@
                     <i class="ri-close-line"></i>
                 </a>
             </div>
-        </div>
+        </div>*@
 
         <div class="overlay">
         </div>
@@ -682,9 +686,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>
-
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
