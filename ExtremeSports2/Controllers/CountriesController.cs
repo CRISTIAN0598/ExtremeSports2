@@ -126,11 +126,11 @@ namespace ExtremeSports2.Controllers
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
                         _flashMessage.Danger("Ya existe un departamento con el mismo nombre en este país.");
-                        //ModelState.AddModelError(string.Empty, "Ya existe un departamento con el mismo nombre en este país");
+                      
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
                 }
                 catch (Exception exception)

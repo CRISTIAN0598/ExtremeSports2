@@ -3,16 +3,18 @@ using ExtremeSports2.Data.Entities;
 using ExtremeSports2.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Vereyon.Web;
 
 namespace ExtremeSports2.Controllers
 {
     public class CategoriesController: Controller
     {
         private readonly DataContext _context;
-
-        public CategoriesController(DataContext context)
+        private readonly IFlashMessage _flashMessage;
+        public CategoriesController(DataContext context, IFlashMessage flashMessage)
         {
             _context = context;
+            _flashMessage = flashMessage;
         }
 
         public async Task<IActionResult> Index()
@@ -46,31 +48,44 @@ namespace ExtremeSports2.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (id == 0)
+                try
                 {
-                    _context.Add(category);
-                    await _context.SaveChangesAsync();
-
+                    if (id == 0) //Insert
+                    {
+                        _context.Add(category);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro creado.");
+                    }
+                    else //Update
+                    {
+                        _context.Update(category);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro actualizado.");
+                    }
                 }
-                else
+                catch (DbUpdateException dbUpdateException)
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        _flashMessage.Danger("Ya existe una categoría con el mismo nombre.");
+                    }
+                    else
+                    {
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
+                    }
+                  
                 }
-                return Json(new
+                catch (Exception exception)
                 {
-                    isValid = true,
-                    html = ModalHelper.RenderRazorViewToString(
-                          this,
-                          "_ViewAll",
-                          _context.Categories
-                              .ToList())
-                });
+                    _flashMessage.Danger(exception.Message);
+                    return View(category);
+                }
+
+                return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAll", _context.Categories.ToList()) });
 
             }
-            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", category) });
 
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", category) });
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -80,12 +95,13 @@ namespace ExtremeSports2.Controllers
             {
                 _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
-               
+                _flashMessage.Info("Registro borrado.");
             }
-            catch (Exception ex)
+            catch 
             {
-
+                _flashMessage.Danger("No se puede borrar la categoría porque tiene registros relacionados.");
             }
+
             return RedirectToAction(nameof(Index));
         }
     }

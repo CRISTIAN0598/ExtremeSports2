@@ -12,14 +12,12 @@
             </th>
             <th>
                 @*@Html.DisplayNameFor(model => model.ProductsNumber)*@
-                Nombre producto
+                nro producto
             </th>
 
+    
             <th>
-               @* <a onclick="showInPopup('@Url.Action("AddOrEdit", "Categories", new { id = 0 }, Context.Request.Scheme)' , 'Nueva Categoría')" class="btn btn-sm btn-primary text-white"><i class="fa fa-plus-circle"></i> Categoría</a>*@otro
-            </th>
-            <th>
-                Acciones
+                <button onclick="showInPopup('@Url.Action("AddOrEdit", "Categories", new { id = 0 }, Context.Request.Scheme)' , 'Nueva Categoría')" class="primary-button">Nueva categoría</button>
                 @*<a onclick="showInPopup('@Url.Action("AddOrEdit", "Categories", new { id = 0 }, Context.Request.Scheme)' , 'Nueva Categoría')" class="btn btn-sm btn-primary text-white"><i class="fa fa-plus-circle"></i> Categoría</a>*@
             </th>
         </tr>
@@ -32,21 +30,16 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @*@Html.DisplayFor(modelItem => item.ProductsNumber)*@
-                    teclado
+                   @* @Html.DisplayFor(modelItem => item.ProductsNumber)*@
+                   6
                 </td>
+               
                 <td>
-                  otro
-                </td>
-                <td>
-                    <a onclick="showInPopup('@Url.Action("AddOrEdit", "Categories", new { id = 0 }, Context.Request.Scheme)' , 'Nueva Categoría')" class="icon_add hero__cta"> <i class="ri-add-circle-fill"></i></a>
 
-                    <a onclick="showInPopup('@Url.Action("AddOrEdit", "Categories", new { id = item.Id }, Context.Request.Scheme)' , 'Actualizar Categoría')" class="icon_edit"><i class="ri-pencil-fill "></i></a>
-                    <a data-id="@item.Id" class="icon_delete deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="ri-delete-bin-2-fill"></i></a>
-                  
-                   @* <a onclick="showInPopup('@Url.Action("AddOrEdit", "Categories", new { id=item.Id }, Context.Request.Scheme)' , 'Actualizar Categoría')" class="btn btn-sm btn-warning"><i class="fa fa-pencil-alt"></i> </a>
-                    
-                    <button data-id="@item.Id" class="btn btn-sm btn-danger deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="fa fa-trash"></i></button>*@
+                    <a title="Editar" onclick="showInPopup('@Url.Action("AddOrEdit", "Categories", new { id=item.Id }, Context.Request.Scheme)' , 'Actualizar Categoría')" class="icon_edit"><i class="ri-pencil-fill"></i> </a>
+                   
+                    <a title="Eliminar" data-id="@item.Id" class="icon_delete deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="ri-delete-bin-2-fill"></i></a>
+         
                 </td>
             </tr>
         }
