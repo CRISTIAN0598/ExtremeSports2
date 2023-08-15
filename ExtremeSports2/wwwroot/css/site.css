@@ -367,6 +367,7 @@ nav .fly-item,
 
     .secondary-button:hover {
         background-color: var(--primary-color);
+        color: var(--dark-color);
     }
 
 .light-button {
@@ -2397,12 +2398,12 @@ B. Head & products block
     transform: translateY(20px);
     transition: transform .2s, visibility .2s, opacity .2s;
 }*/
-.show  {
+/*.show  {
     visibility: visible !important;
     opacity: 1 !important;
     transform: translateY(0);
     transition: transform 1s,visibility 1s, opacity 1s;
-}
+}*/
 
 
 

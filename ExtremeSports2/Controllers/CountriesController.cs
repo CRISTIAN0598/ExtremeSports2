@@ -8,35 +8,44 @@ using Microsoft.EntityFrameworkCore;
 using ExtremeSports2.Data;
 using ExtremeSports2.Data.Entities;
 using ExtremeSports2.Helpers;
+using ExtremeSports2.Models;
+using Vereyon.Web;
+using static ExtremeSports2.Helpers.ModalHelper;
 
 namespace ExtremeSports2.Controllers
 {
     public class CountriesController : Controller
     {
         private readonly DataContext _context;
+        private readonly IFlashMessage _flashMessage;
 
-        public CountriesController(DataContext context)
+        public CountriesController(DataContext context, IFlashMessage flashMessage)
         {
             _context = context;
+            _flashMessage = flashMessage;
         }
 
         // GET: Countries
         public async Task<IActionResult> Index()
         {
-              return _context.Countries != null ? 
-                          View(await _context.Countries.ToListAsync()) :
-                          Problem("Entity set 'DataContext.Countries'  is null.");
+
+            return View(await _context.Countries
+                .Include(c => c.States)
+                .ThenInclude(s => s.Cities)
+                .ToListAsync());
         }
 
         // GET: Countries/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Countries == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             var country = await _context.Countries
+                .Include(c => c.States)
+                .ThenInclude(s => s.Cities)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (country == null)
             {
@@ -46,10 +55,43 @@ namespace ExtremeSports2.Controllers
             return View(country);
         }
 
-        // GET: Countries/Create
-        public IActionResult Create()
+        public async Task<IActionResult> DetailsState(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States
+                .Include(c => c.Country)
+                .Include(s => s.Cities)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+
+            return View(state);
+        }
+
+
+        // GET: Countries/Create
+
+        [NoDirectAccess]
+        public async Task<IActionResult> AddState(int id)
+        {
+
+
+            Country country = await _context.Countries.FindAsync(id);
+            if (country == null)
+            {
+                return NotFound();
+            }
+            StateViewModel model = new()
+            {
+                CountryId = country.Id,
+            };
+            return View(model);
         }
 
         // POST: Countries/Create
@@ -57,31 +99,134 @@ namespace ExtremeSports2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Country country)
+        public async Task<IActionResult> AddState(StateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(country);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    State state = new()
+                    {
+                        Cities = new List<City>(),
+                        Country = await _context.Countries.FindAsync(model.CountryId),
+                        Name = model.Name,
+                    };
+                    _context.Add(state);
+                    await _context.SaveChangesAsync();
+                    Country country = await _context.Countries
+               .Include(c => c.States)
+               .ThenInclude(s => s.Cities)
+               .FirstOrDefaultAsync(c => c.Id == model.CountryId);
+                    _flashMessage.Info("Registro creado.");
+                    return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllStates", country) });
+
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        _flashMessage.Danger("Ya existe un departamento con el mismo nombre en este país.");
+                        //ModelState.AddModelError(string.Empty, "Ya existe un departamento con el mismo nombre en este país");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+
             }
-            return View(country);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddState", model) });
         }
 
-        // GET: Countries/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [NoDirectAccess]
+        public async Task<IActionResult> AddCity(int id)
         {
-            if (id == null || _context.Countries == null)
+
+
+            State state = await _context.States.FindAsync(id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+            CityViewModel model = new()
+            {
+                StateId = state.Id,
+            };
+            return View(model);
+        }
+
+        // POST: Countries/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCity(CityViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    City city = new()
+                    {
+
+                        State = await _context.States.FindAsync(model.StateId),
+                        Name = model.Name,
+                    };
+                    _context.Add(city);
+                    await _context.SaveChangesAsync();
+                    State state = await _context.States
+                        .Include(s => s.Cities)
+                         .FirstOrDefaultAsync(c => c.Id == model.StateId);
+                    _flashMessage.Info("Registro creado");
+                    return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllCities", state) });
+
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        _flashMessage.Danger("Ya existe una ciudad con el mismo nombre en este departamento/estado.");
+                    }
+                    else
+                    {
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    _flashMessage.Danger(exception.Message);
+                }
+
+            }
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "CreateCity", model) });
+        }
+        // GET: Countries/Edit/5
+
+        //[NoDirectAccess]
+        public async Task<IActionResult> EditState(int id)
+        {
+
+
+            State state = await _context.States
+                .Include(x => x.Country)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (state == null)
             {
                 return NotFound();
             }
 
-            var country = await _context.Countries.FindAsync(id);
-            if (country == null)
+            StateViewModel model = new()
             {
-                return NotFound();
-            }
-            return View(country);
+                CountryId = state.Country.Id,
+                Id = state.Id,
+                Name = state.Name,
+            };
+            return View(model);
         }
 
         // POST: Countries/Edit/5
@@ -89,9 +234,9 @@ namespace ExtremeSports2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Country country)
+        public async Task<IActionResult> EditState(int id, StateViewModel model)
         {
-            if (id != country.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -100,62 +245,141 @@ namespace ExtremeSports2.Controllers
             {
                 try
                 {
-                    _context.Update(country);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CountryExists(country.Id))
+                    State state = new()
                     {
-                        return NotFound();
+                        Id = model.Id,
+                        Name = model.Name,
+                    };
+                    _context.Update(state);
+                    Country country = await _context.Countries
+                .Include(c => c.States)
+                .ThenInclude(s => s.Cities)
+                .FirstOrDefaultAsync(c => c.Id == model.CountryId);
+                    await _context.SaveChangesAsync();
+                    _flashMessage.Info("Registro actualizado.");
+                    return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllStates", country) });
+
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe un Departamento con el mismo nombre en este país.");
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+
             }
-            return View(country);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "EditState", model) });
         }
 
-        // GET: Countries/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [NoDirectAccess]
+        public async Task<IActionResult> EditCity(int id)
         {
-            if (id == null || _context.Countries == null)
+
+
+            City city = await _context.Cities
+                .Include(c => c.State)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (city == null)
             {
                 return NotFound();
             }
 
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.Id == id);
+            CityViewModel model = new()
+            {
+                StateId = city.State.Id,
+                Id = city.Id,
+                Name = city.Name,
+            };
+            return View(model);
+        }
+
+        // POST: Countries/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditCity(int id, CityViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    City city = new()
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+
+                    };
+                    _context.Update(city);
+                    await _context.SaveChangesAsync();
+                    State state = await _context.States
+                    .Include(s => s.Cities)
+                    .FirstOrDefaultAsync(c => c.Id == model.StateId);
+                    _flashMessage.Info("Registro actualizado.");
+                    return Json(new { isValid = true, html = ModalHelper.RenderRazorViewToString(this, "_ViewAllCities", state) });
+
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe una ciudad con el mismo nombre en este Departamento/estado.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+
+            }
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "EditCity", model) });
+        }
+        // GET: Countries/Delete/5
+        [NoDirectAccess]
+        public async Task<IActionResult> Delete(int id)
+        {
+
+
+            Country country = await _context.Countries.FirstOrDefaultAsync(c => c.Id == id);
             if (country == null)
             {
                 return NotFound();
             }
 
-            return View(country);
-        }
-
-        // POST: Countries/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Countries == null)
-            {
-                return Problem("Entity set 'DataContext.Countries'  is null.");
-            }
-            var country = await _context.Countries.FindAsync(id);
-            if (country != null)
+            try
             {
                 _context.Countries.Remove(country);
+                await _context.SaveChangesAsync();
+                _flashMessage.Info("Registro borrado.");
             }
-            
-            await _context.SaveChangesAsync();
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar el país porque tiene registros relacionados.");
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
+        [NoDirectAccess]
         public async Task<IActionResult> AddOrEdit(int id = 0)
         {
             if (id == 0)
@@ -180,16 +404,110 @@ namespace ExtremeSports2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(country);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    if (id == 0) //Insert
+                    {
+                        _context.Add(country);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro creado.");
+                    }
+                    else //Update
+                    {
+                        _context.Update(country);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro actualizado.");
+                    }
+                    return Json(new
+                    {
+                        isValid = true,
+                        html = ModalHelper.RenderRazorViewToString(
+                            this,
+                            "_ViewAllCountries",
+                            _context.Countries
+                                .Include(c => c.States)
+                                .ThenInclude(s => s.Cities)
+                                .ToList())
+                    });
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        _flashMessage.Danger("Ya existe un país con el mismo nombre.");
+                    }
+                    else
+                    {
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    _flashMessage.Danger(exception.Message);
+                }
             }
-            return View(country);
+
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", country) });
         }
+
+        [NoDirectAccess]
+        public async Task<IActionResult> DeleteState(int id)
+        {
+
+            State state = await _context.States
+                .Include(s => s.Country)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.States.Remove(state);
+                await _context.SaveChangesAsync();
+                _flashMessage.Info("Registro borrado.");
+            }
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar el estado / departamento porque tiene registros relacionados.");
+            }
+
+            return RedirectToAction(nameof(Details), new { Id = state.Country.Id });
+        }
+
+        [NoDirectAccess]
+
+        public async Task<IActionResult> DeleteCity(int id)
+        {
+
+
+            City city = await _context.Cities
+                .Include(c => c.State)
+                .FirstOrDefaultAsync(c => c.Id == id);
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Cities.Remove(city);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar la ciudad porque tiene registros relacionados.");
+            }
+
+            _flashMessage.Info("Registro borrado.");
+            return RedirectToAction(nameof(DetailsState), new { Id = city.State.Id });
+        }
+
 
         private bool CountryExists(int id)
         {
-          return (_context.Countries?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.Countries.Any(e => e.Id == id);
         }
     }
 }

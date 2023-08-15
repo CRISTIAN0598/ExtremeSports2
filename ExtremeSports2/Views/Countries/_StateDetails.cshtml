@@ -1,10 +1,8 @@
-﻿@model ExtremeSports2.Data.Entities.Country
-
-
+﻿@model ExtremeSports2.Data.Entities.State
 <flash dismissable="true" />
 <div class="container">
 
-   
+
 
     <!-- BreadCrumb -->
     <div class="column">
@@ -17,20 +15,20 @@
 
                             <div class="description collapse">
                                 <ul>
-                                    <li class="has-child expand" >
+                                    <li class="has-child expand">
                                         <a href="#0" class="icon-small" style="border-top:none">Detalles</a>
                                         <ul class="content">
-                                            <li><span>@Html.DisplayNameFor(model => model.Name)</span> <span>@Html.DisplayFor(model => model.Name)</span></li>
-                                            <li><span>Estados</span> <span>@Html.DisplayFor(model => model.StatesNumber)</span></li>
+                                            <li><span>Estado</span> <span>@Html.DisplayFor(model => model.Name)</span></li>
+                                            <li><span>@Html.DisplayNameFor(model => model.CitiesNumber)</span> <span>@Html.DisplayFor(model => model.CitiesNumber)</span></li>
                                         </ul>
 
                                     </li>
 
 
                                 </ul>
-                                <a asp-action="Index" class="secondary-button">Regresar</a>
+                                <a <a asp-action="Details" asp-route-id="@Model?.Country.Id" class="secondary-button">Regresar</a>
                             </div>
-                         
+
                         </div>
                     </div>
                 </div>
@@ -39,5 +37,3 @@
     </div>
 
 </div>
-
-

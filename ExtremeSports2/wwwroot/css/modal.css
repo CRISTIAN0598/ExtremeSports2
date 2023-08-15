@@ -1,34 +1,37 @@
 ﻿.modal {
-    position: fixed;
+     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    max-width: 600px;
-    width: 90%;
-    height: max-content;
     padding: 2em;
     margin: auto;
     text-align: center;
-    
+    background-color: #111111bd;
     z-index: 1000;
     visibility: hidden;
     opacity: 0;
     transform: translateY(20px);
     transition: transform .2s, visibility .2s, opacity .2s;
+    background-color: rgba(0,0,0,0.4);
+  
 }
 .show {
     visibility: visible;
     opacity: 1;
     transform: translateY(0);
     transition: transform 1s,visibility 1s, opacity 1s;
+    pointer-events: unset;
+  
 }
+
 .modal-content {
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
-   
+    margin:0 auto;
+    width: 50%;
+    top:200px;
     pointer-events: auto;
     background-color: #fff;
     background-clip: padding-box;
@@ -84,19 +87,19 @@ element.style {
     
 }
 
-    .modal-footer .primary-button-modal {
-        right: 0;
-        border: 0;
-        outline: 0;
-        font-size: 0.875em;
-        font-weight: var(--fw6);
-        background-color: var(--primary-color);
-        color: var(--dark-color);
-        border-radius: 0 7px 7px 0;
-        cursor: pointer;
-        transition: var(--trans-background);
-        height:47px;
-    }
+.modal-footer .primary-button-modal {
+    right: 0;
+    border: 0;
+    outline: 0;
+    font-size: 0.875em;
+    font-weight: var(--fw6);
+    background-color: var(--primary-color);
+    color: var(--dark-color);
+    border-radius: 0 7px 7px 0;
+    cursor: pointer;
+    transition: var(--trans-background);
+    height: 47px;
+}
         .modal-footer .primary-button-modal:hover, .modal-footer .secondary-button-modal:hover {
             background-color: var(--light_bg_color);
         }
@@ -133,7 +136,7 @@ element.style {
    align-items:center;
  
 }
-.search :where(span,button) {
+.search:where(button) {
     position: absolute;
     /*top: 0;*/
     padding: 0.77em 1.6em;
@@ -142,3 +145,63 @@ element.style {
     height: var(--percent100);
    
 }
+
+.input-validation-error {
+    border: 1px solid #f00;
+    background-color: #fee;
+}
+
+form .text-danger{
+    top:-40px;
+    left:-20px;
+    height:20px;
+    
+}
+.alert-info {
+    color: var(--dark-color);
+    background-color: var(--primary-color);
+    opacity:.7;
+    border-color: #f7f3a7;
+    font-weight: var(--fw7);
+}
+.alert-dismissible {
+    padding-right: 3rem;
+}
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    text-align: center;
+}
+
+.alert-dismissible .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    padding: 1.25rem 1rem;
+    border: none;
+    cursor: pointer;
+}
+.btn-close {
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: 0.25em 0.25em;
+    color: #000;
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+    border-radius: 0.25rem;
+    opacity: .5;
+}
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.alert-dismissible {
+    padding-right: 3rem;
+}
+

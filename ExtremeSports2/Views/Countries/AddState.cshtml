@@ -1,0 +1,34 @@
+﻿@model ExtremeSports2.Models.StateViewModel
+
+@{
+    ViewData["Title"] = "Estado / Departamento";
+    Layout = null;
+}
+
+
+
+<div class="container smfont">
+    <form asp-action="AddState" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);" class="search">
+        <div class="box-body">
+         
+
+             <div asp-validation-summary="ModelOnly"></div>
+            <input type="hidden" asp-for="CountryId" />
+            <partial name="_State" />
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="primary-button-modal"> Guardar</button>
+        </div>
+
+        <div class="mensajes">
+            
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<flash dismissable="true" />
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -198,3 +198,30 @@ table.dataTable thead th, table.dataTable tfoot th {
     font-family: 'Poppins';
     font-size: 1.75em;
 }
+.primary-button {
+    font-size: var(--font-small);
+    padding: 0.9em 2em;
+    height: auto;
+    width: fit-content;
+    border-radius: 2em;
+    transition: var(--trans-background-color);
+    background-color: var(--primary-color);
+    color: var(--dark-color);
+    cursor: pointer;
+    border: none;
+    font-weight: var(--fw8);
+}
+
+
+    .primary-button:hover {
+        background-color: var(--white-color);
+        color: var(--dark-color);
+    }
+
+.title-detalle {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+}

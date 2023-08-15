@@ -1,33 +1,27 @@
-﻿@model ExtremeSports2.Data.Entities.Country
+﻿@model IEnumerable<ExtremeSports2.Data.Entities.Category>
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Index";
 }
 
+
 <flash dismissable="true" />
-<link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />  
-@*<h1 class="titulo-tabla">Detalles</h1>*@
-
-<div>
-    <partial name="_CountryDetails" />
-</div>
-
-@*<div>
-    <a asp-action="Index" class="btn btn-outline-success"><i class="fa-solid fa-arrow-rotate-left"></i> Regresar</a>
-</div>*@
-<hr />
-
+<link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
 <!-- Content Wrapper. Contains page content -->
 <div class="container-fluid">
     <div class="card mt-2">
-       
+        <div class="titulo-tabla">
+            <i class="fa fa-object-group"></i>  <strong>Categorías</strong>
+        </div>
         <div class="card-body">
             <div id="view-all">
-                @await Html.PartialAsync("_ViewAllStates", Model)
+                @await Html.PartialAsync("_ViewAll", Model)
             </div>
         </div>
     </div>
 </div>
+
+
 
 <partial name="_AddOrEditDialog" />
 <partial name="_DeleteDialog" />
@@ -41,7 +35,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#StatesTable').DataTable({
+            $('#CategoriesTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
@@ -54,6 +48,6 @@
     </script>
 
     <script>
-        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Countries/DeleteState/', false);
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Categories/Delete/', false);
     </script>
 }

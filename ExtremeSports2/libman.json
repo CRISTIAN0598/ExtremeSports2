@@ -9,6 +9,10 @@
     {
       "library": "datatable@2.0.2",
       "destination": "wwwroot/lib/datatable/"
+    },
+    {
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/lib/toastr.js/"
     }
   ]
 }

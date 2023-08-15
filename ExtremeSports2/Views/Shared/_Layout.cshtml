@@ -5,9 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+@*    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />*@
    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="~/lib/jqueryui/jquery-ui.min.css" />
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -164,7 +166,7 @@
                                                         <div class="row">
                                                             <h4>Dashboard</h4>
                                                             <ul>
-                                                                <li><a href="">Categorías</a></li>
+                                                                <li><a asp-area ="" asp-controller="Categories" asp-action="Index">Categorías</a></li>
                                                                 <li><a href="">Productos</a></li>
                                                                 <li><a  asp-area="" asp-controller="Countries" asp-action="Index">Países</a></li>
                                                               
@@ -691,7 +693,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
-
+   
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
