@@ -11,9 +11,12 @@ using ExtremeSports2.Helpers;
 using ExtremeSports2.Models;
 using Vereyon.Web;
 using static ExtremeSports2.Helpers.ModalHelper;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace ExtremeSports2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CountriesController : Controller
     {
         private readonly DataContext _context;

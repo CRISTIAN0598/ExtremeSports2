@@ -1,12 +1,15 @@
 ﻿using ExtremeSports2.Data;
 using ExtremeSports2.Data.Entities;
 using ExtremeSports2.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using Vereyon.Web;
 
 namespace ExtremeSports2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController: Controller
     {
         private readonly DataContext _context;

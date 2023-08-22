@@ -133,7 +133,7 @@ REUSABLE SELECTOR
 }
 
 .main-links a:hover {
-    color: var(--secodary-color);
+    color: var(--light-text-color);
 }
 
 .second-links a:hover {
@@ -192,7 +192,7 @@ A. Header Top
     position: absolute;
     left: -1em;
     line-height: 2em;
-    background-color: var(--white-color);
+    background-color: var(--dark-color);
     border: 1px solid var(--border-color);
     z-index: 1;
     display: none;
@@ -203,7 +203,7 @@ A. Header Top
 }
 
 :where(.header-top, .thetop-nav) .right ul ul li.current a {
-    background-color: var(--border-color);
+    background-color: var(--ligh_bg_yellow);
 }
 
 .header-top li:hover ul {
@@ -309,6 +309,8 @@ nav .fly-item,
 
 .mobile-hide {
     display: none;
+    background-color: var(--dark-color);
+    ;
 }
 
 .mega .flexcol {

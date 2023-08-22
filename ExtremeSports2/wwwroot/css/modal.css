@@ -149,13 +149,14 @@ element.style {
 .input-validation-error {
     border: 1px solid #f00;
     background-color: #fee;
+   
 }
 
-form .text-danger{
-    top:-40px;
-    left:-20px;
-    height:20px;
-    
+form .text-danger {
+    top: -40px;
+    left: -20px;
+    height: 20px;
+    color: var(--light-text-color);
 }
 .alert-info {
     color: var(--dark-color);

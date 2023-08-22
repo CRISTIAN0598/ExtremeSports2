@@ -1,0 +1,207 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap');
+
+:root {
+    --primary-color: #F5E429;
+    --ligh_bg_yellow: #f5e42993;
+    --secodary-color: #080808;
+    --seconday-dark-colot: #453c5c;
+    --white-color: #ffffff;
+    --light_bg_color: #f2f3f5;
+    --light-text-color: #7c899a;
+    --border-color: #e5e8ec;
+    --dark-color: #0a021c;
+    --font-small: 13px;
+    --font-smaller: 11px;
+    --percent100: 100%;
+    --percent50: 50%;
+    --fw3: 300;
+    --fw5: 500;
+    --fw6: 600;
+    --fw7: 700;
+    --fw8: 800;
+    --trans-background-color: background-color .3s,color .3s;
+    --trans-background: background-color .3s;
+    --trans-color: color .3s;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Rubik',sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+section {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    /* background: url("https://images.pexels.com/photos/7748924/pexels-photo-7748924.jpeg?auto=compress&cs=tinysrgb&w=600") no-repeat; */
+    background-size: cover;
+    background-position: center;
+    background: var(--dark-color);
+}
+
+.login-box {
+    position: relative;
+    width: 400px;
+    height: 450px;
+    background-color: transparent;
+    box-shadow: 0 0 25px var(--ligh_bg_yellow);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(15px);
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.input-box {
+    position: relative;
+    width: 310px;
+    margin: 30px 0;
+}
+
+    .input-box .label-login {
+        position: absolute;
+        top: 0;
+        left: 5px;
+        transform: translateY(-50%);
+        font-size: 0.8rem;
+        color: #fff;
+        pointer-events: none;
+        transition: .5s;
+    }
+
+    .input-box input:focus ~ label {
+        top: 0;
+        color: var(--ligh_bg_yellow);
+    }
+
+    .input-box input {
+        width: 100%;
+        height: 50px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 1em;
+        color: #fff;
+        padding: 0 35px 0 5px;
+        border-bottom: 2px solid #fff;
+    }
+
+        .input-box input:focus {
+            border-bottom-color: var(--ligh_bg_yellow);
+        }
+
+    .input-box i {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #fff;
+        transition: .5s;
+    }
+
+    .input-box input:focus ~ i {
+        color: var(--ligh_bg_yellow);
+    }
+
+.remember-forgot {
+    margin: -15px 0 15px;
+    font-size: .9em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+    .remember-forgot label input {
+        margin-right: 3px;
+    }
+
+    .remember-forgot a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+            color: var(--light-text-color);
+        }
+
+.btn-login {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    outline: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    z-index: 1;
+    overflow: hidden;
+}
+
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: 0;
+        width: 100%;
+        height: 300%;
+        background: linear-gradient(#000,var(--primary-color),#000,var(--primary-color));
+        z-index: -1;
+        transition: .5s;
+    }
+
+    .btn-login:hover::before {
+        top: 0;
+    }
+
+.register-link {
+    font-size: .9em;
+    color: #fff;
+    text-align: center;
+    margin: 25px 0 10px;
+}
+
+    .register-link p a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .register-link p a:hover {
+            text-decoration: underline;
+            color: var(--light-text-color);
+        }
+
+@media (max-width:360px) {
+    .login-box {
+        width: 100%;
+        height: 100vh;
+        border: none;
+        border-radius: 0;
+    }
+
+    .input-box {
+        width: 290px;
+    }
+} 

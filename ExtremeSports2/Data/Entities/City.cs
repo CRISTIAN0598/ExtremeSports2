@@ -16,5 +16,7 @@ namespace ExtremeSports2.Data.Entities
         [JsonIgnore]
         public State ?State { get; set; }
 
+        public ICollection<User> Users { get; set;}
+
     }
 }

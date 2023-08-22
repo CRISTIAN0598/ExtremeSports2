@@ -1,4 +1,5 @@
 ﻿using ExtremeSports2.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -6,7 +7,7 @@ using System.Reflection.Emit;
 
 namespace ExtremeSports2.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
