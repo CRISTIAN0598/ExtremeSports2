@@ -55,10 +55,10 @@ namespace ExtremeSports2.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                //if (result.IsLockedOut)
-                //{
-                //    _flashMessage.Danger("Ha superado el máximo número de intentos, su cuenta está bloqueada, intente de nuevo en 5 minutos.");
-                //}
+                if (result.IsLockedOut)
+                {
+                    _flashMessage.Danger("Ha superado el máximo número de intentos, su cuenta está bloqueada, intente de nuevo en 5 minutos.");
+                }
                 //else if (result.IsNotAllowed)
                 //{
                 //    _flashMessage.Danger("El usuario no ha sido habilitado, debes de seguir las instrucciones enviadas al correo para poder habilitarlo.");
