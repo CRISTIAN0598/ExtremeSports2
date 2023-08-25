@@ -1,0 +1,115 @@
+﻿@model IEnumerable<ExtremeSports2.Data.Entities.User>
+
+<flash dismissable="true" />
+
+
+
+<div class="table">
+    <div class="table_section">
+        <table class="table-striped table-responsive-md table-bordered smfont" id="UsersTable">
+            <colgroup>
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+                <col span="1" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Create" class="primary-button" style="padding: 0.9em 2em;"> Nuevo Administrador</a>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImageFullPath)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Document)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.City.State.Country.Name)
+                    </th>
+                    <th>
+                        Estado
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.City.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        Teléfono
+                    </th>
+                    <th>
+                        Tipo
+                    </th>
+                    <th>
+                        Habilitado
+                    </th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            <div class="zoom">
+                                <img src="@item.ImageFullPath" style="width:100px; height:100px; border-radius:50px" />
+                            </div>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Document)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City.State.Country.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City.State.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                        </td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+   
+</div>
+

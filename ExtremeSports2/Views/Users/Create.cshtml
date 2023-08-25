@@ -1,0 +1,183 @@
+﻿@model ExtremeSports2.Models.AddUserViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+<link rel="stylesheet" href="~/css/Register.css" asp-append-version="true" />
+
+@*
+<div class="text-success">
+    <h3>
+        @ViewBag.Message
+    </h3>
+</div>
+*@
+<section>
+    <flash dismissable="true" />
+    <div class="login-box login">
+
+        <form asp-action="Create" enctype="multipart/form-data" class="form-register">
+            <h2>Registrar administrador</h2>
+            <div class="container-img">
+                <figure>
+                    <img src="~/images/NoImage.jpg" alt="" id="img" class="file-image">
+                </figure>
+
+                <input type="file" asp-for="ImageFile" id="file">
+                <label for="file" class="label-file"><i class="ri-camera-fill"></i></label>
+
+
+            </div>
+            <div class="form-container">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="UserType" />
+                <input type="hidden" asp-for="Countries" />
+                <input type="hidden" asp-for="States" />
+                <input type="hidden" asp-for="Cities" />
+
+                @*    <div class="form-group">
+                <span class="required">*</span>
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+
+                <div class="row">
+                <div class="col-md-6">
+                <div class="form-group">
+                <span class="required">*</span>
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="form-group">
+                <span class="required">*</span>
+                <label asp-for="PasswordConfirm" class="control-label"></label>
+                <input asp-for="PasswordConfirm" class="form-control" />
+                <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+                </div>
+                </div>
+                </div>*@
+                <div>
+                    <div class="input-box">
+
+                        <input asp-for="Username" asp-for="Username">
+                        <label asp-for="Username" class="label-login"></label>
+                        <span asp-validation-for="Username" class="text-danger"></span>
+
+
+                    </div>
+                    <div class="input-box">
+
+                        <input type="password" asp-for="Password">
+                        <label asp-for="Password" class="label-login"></label>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+
+                    </div>
+                    <div class="input-box">
+
+                        <input type="password" asp-for="PasswordConfirm">
+                        <label asp-for="PasswordConfirm" class="label-login"></label>
+                        <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+
+
+                <partial name="_User" />
+
+
+
+
+
+
+            </div>
+            <button type="submit" class="btn-login">Guardar</button>
+        </form>
+
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#CountryId").change(function () {
+                if ($("#CountryId").val() == 0) {
+                    $("#StateId").empty();
+                    $("#StateId").append('<option value="0">Selecciona un departamento/estado...</option>');
+                    $("#CityId").empty();
+                    $("#CityId").append('<option value="0">Selecciona una ciudad...</option>');
+                    return;
+                }
+                $("#StateId").empty();
+                $("#StateId").append('<option value="0">Selecciona un departamento/estado...</option>');
+                $("#CityId").empty();
+                $("#CityId").append('<option value="0">Selecciona una ciudad...</option>');
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetStates")',
+                    dataType: 'json',
+                    data: { countryId: $("#CountryId").val() },
+                    success: function (states) {
+                        console.log(states)
+                        //if(states.){
+                        //    return;
+                        //}
+                        $.each(states, function (i, state) {
+                            $("#StateId").append('<option value="'
+                                + state.id + '">'
+                                + state.name + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+                return false;
+            })
+
+            $("#StateId").change(function () {
+                if ($("#StateId").val() == 0) {
+                    $("#CityId").empty();
+                    $("#CityId").append('<option value="0">Selecciona una ciudad...</option>');
+                    return;
+                }
+                $("#CityId").empty();
+                $("#CityId").append('<option value="0">Selecciona una ciudad...</option>');
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetCities")',
+                    dataType: 'json',
+                    data: { stateId: $("#StateId").val() },
+                    success: function (cities) {
+                        $.each(cities, function (i, city) {
+                            debugger;
+                            $("#CityId").append('<option value="'
+                                + city.id + '">'
+                                + city.name + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve cities.' + ex);
+                    }
+                });
+                return false;
+            })
+        });
+    </script>
+}
+
+
+
+
+
+

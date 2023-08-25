@@ -1,0 +1,103 @@
+﻿@model ExtremeSports2.Models.EditUserViewModel
+
+
+
+
+
+
+
+
+
+
+
+<div>
+    <div class="input-box">
+
+        <input asp-for="Document">
+        <label asp-for="Document" class="label-login"></label>
+        <span asp-validation-for="Document" class="text-danger"></span>
+
+    </div>
+    <div class="input-box">
+
+        <input asp-for="FirstName">
+        <label asp-for="FirstName" class="label-login"></label>
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+
+    </div>
+    <div class="input-box">
+
+        <input asp-for="LastName">
+        <label asp-for="LastName" class="label-login"></label>
+        <span asp-validation-for="LastName" class="text-danger"></span>
+
+    </div>
+
+   
+
+</div>
+<div>
+    <div class="input-box">
+
+
+        <select asp-for="CountryId" asp-items="Model.Countries">
+        </select>
+        <label asp-for="CountryId"  class="label-login"></label>
+        <span asp-validation-for="CountryId" class="text-danger"></span>
+
+
+
+
+    </div>
+    <div class="input-box">
+
+        <select asp-for="StateId" asp-items="Model.States">
+        </select>
+        <label asp-for="StateId"  class="label-login"></label>
+        <span asp-validation-for="StateId" class="text-danger"></span>
+
+
+    </div>
+    <div class="input-box">
+
+        <select asp-for="CityId" asp-items="Model.Cities">
+        </select>
+        <label asp-for="CityId"  class="label-login"></label>
+        <span asp-validation-for="CityId" class="text-danger"></span>
+
+
+    </div>
+
+
+
+</div>
+<div>
+    <div class="input-box">
+
+        <input asp-for="Address">
+        <label asp-for="Address" class="label-login"></label>
+        <span asp-validation-for="Address" class="text-danger"></span>
+
+    </div>
+    <div class="input-box">
+
+        <input asp-for="PhoneNumber">
+        <label asp-for="PhoneNumber" class="label-login"></label>
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+    </div>
+
+   
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

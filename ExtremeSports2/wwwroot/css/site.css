@@ -2450,7 +2450,18 @@ B. Head & products block
 }
 
 
+::-webkit-scrollbar {
+    height: 10px;
+    width: 5px;
+}
 
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px var(--ligh_bg_yellow);
+}
+
+::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px var(--ligh_bg_yellow);
+}
 
 /*RESPONSIVE*/
 @media screen and (min-width:481px) {

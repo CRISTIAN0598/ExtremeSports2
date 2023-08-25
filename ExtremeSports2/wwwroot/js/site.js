@@ -178,3 +178,21 @@ divTrigger.addEventListener('click', () => {
    //document.querySelector('.modalclose').addEventListener('click', function(){
    //    document.querySelector('.site').classList.remove('showmodal')
    //})
+
+
+//Picture Preview
+const defaultFile ='https://localhost:7161/images/NoImage.jpg'
+const file = document.getElementById('file');
+const img = document.getElementById('img');
+file.addEventListener('change', e => {
+    if (e.target.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(e.target.files[0])
+    }
+    else {
+        img.src = defaultFile;
+    }
+})
