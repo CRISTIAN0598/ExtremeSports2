@@ -1,15 +1,14 @@
-﻿using Azure;
-using ExtremeSports2.Data.Entities;
+﻿using ExtremeSports2.Data.Entities;
 using ExtremeSports2.Data;
 using ExtremeSports2.Enums;
 using ExtremeSports2.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Policy;
 using Vereyon.Web;
 using ExtremeSports2.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using Microsoft.EntityFrameworkCore;
+using ExtremeSports2.Common;
 
 namespace ExtremeSports2.Controllers
 {
@@ -19,17 +18,17 @@ namespace ExtremeSports2.Controllers
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
         private readonly IBlobHelper _blobHelper;
-        //private readonly IMailHelper _mailHelper;
+        private readonly IMailHelper _mailHelper;
         private readonly IFlashMessage _flashMessage;
         private readonly UserManager<User> _userManager;
 
-        public AccountController(IUserHelper userHelper, DataContext context, ICombosHelper combosHelper, IBlobHelper blobHelper/*, IMailHelper mailHelper*/, IFlashMessage flashMessage, UserManager<User> userManager)
+        public AccountController(IUserHelper userHelper, DataContext context, ICombosHelper combosHelper, IBlobHelper blobHelper, IMailHelper mailHelper, IFlashMessage flashMessage, UserManager<User> userManager)
         {
             _userHelper = userHelper;
             _context = context;
             _combosHelper = combosHelper;
             _blobHelper = blobHelper;
-            //_mailHelper = mailHelper;
+            _mailHelper = mailHelper;
             _flashMessage = flashMessage;
             _userManager = userManager;
         }
@@ -59,10 +58,10 @@ namespace ExtremeSports2.Controllers
                 {
                     _flashMessage.Danger("Ha superado el máximo número de intentos, su cuenta está bloqueada, intente de nuevo en 5 minutos.");
                 }
-                //else if (result.IsNotAllowed)
-                //{
-                //    _flashMessage.Danger("El usuario no ha sido habilitado, debes de seguir las instrucciones enviadas al correo para poder habilitarlo.");
-                //}
+                else if (result.IsNotAllowed)
+                {
+                    _flashMessage.Danger("El usuario no ha sido habilitado, debes de seguir las instrucciones enviadas al correo para poder habilitarlo.");
+                }
 
                 else
                 {
@@ -122,28 +121,28 @@ namespace ExtremeSports2.Controllers
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
                     return View(model);
                 }
-                //string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                //string tokenLink = Url.Action("ConfirmEmail", "Account", new
-                //{
-                //    userid = user.Id,
-                //    token = myToken
-                //}, protocol: HttpContext.Request.Scheme);
+                string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                string tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken
+                }, protocol: HttpContext.Request.Scheme);
 
-                //Response response = _mailHelper.SendMail(
-                //    $"{model.FirstName} {model.LastName}",
-                //    model.Username,
-                //    "Shopping - Confirmación de Email",
-                //    $"<h1>Shopping - Confirmación de Email</h1>" +
-                //        $"Para habilitar el usuario por favor hacer click en el siguiente link:, " +
-                //        $"<hr/><br/><p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
-                //if (response.IsSuccess)
-                //{
-                //    _flashMessage.Info("Usuario registrado. Para poder ingresar al sistema, siga las instrucciones que han sido enviadas a su correo.");
-                //    return RedirectToAction(nameof(Login));
+                Response response = _mailHelper.SendMail(
+                    $"{model.FirstName} {model.LastName}",
+                    model.Username,
+                    "Shopping - Confirmación de Email",
+                    $"<h1>Shopping - Confirmación de Email</h1>" +
+                        $"Para habilitar el usuario por favor hacer click en el siguiente link:, " +
+                        $"<hr/><br/><p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
+                if (response.IsSuccess)
+                {
+                    _flashMessage.Info("Usuario registrado. Para poder ingresar al sistema, siga las instrucciones que han sido enviadas a su correo.");
+                    return RedirectToAction(nameof(Login));
 
-                //}
+                }
 
-                //ModelState.AddModelError(string.Empty, response.Message);
+                _flashMessage.Danger(string.Empty, response.Message);
 
 
             }
@@ -154,27 +153,27 @@ namespace ExtremeSports2.Controllers
             return View(model);
         }
 
-        //public async Task<IActionResult> ConfirmEmail(string userId, string token)
-        //{
-        //    if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return NotFound();
+            }
 
-        //    User user = await _userHelper.GetUserAsync(new Guid(userId));
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
+            User user = await _userHelper.GetUserAsync(new Guid(userId));
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-        //    IdentityResult result = await _userHelper.ConfirmEmailAsync(user, token);
-        //    if (!result.Succeeded)
-        //    {
-        //        return NotFound();
-        //    }
+            IdentityResult result = await _userHelper.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return NotFound();
+            }
 
-        //    return View();
-        //}
+            return View();
+        }
 
         public JsonResult GetStates(int countryId)
         {
@@ -310,68 +309,68 @@ namespace ExtremeSports2.Controllers
             return View(model);
         }
 
-        //public IActionResult RecoverPassword()
-        //{
-        //    return View();
-        //}
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        User user = await _userHelper.GetUserAsync(model.Email);
-        //        if (user == null)
-        //        {
-        //            _flashMessage.Danger("El email no corresponde a ningún usuario registrado.");
-        //            return View(model);
-        //        }
+        [HttpPost]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userHelper.GetUserAsync(model.Email);
+                if (user == null)
+                {
+                    _flashMessage.Danger("El email no corresponde a ningún usuario registrado.");
+                    return View(model);
+                }
 
-        //        string myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
-        //        string link = Url.Action(
-        //            "ResetPassword",
-        //            "Account",
-        //            new { token = myToken }, protocol: HttpContext.Request.Scheme);
-        //        _mailHelper.SendMail(
-        //            $"{user.FullName}",
-        //            model.Email,
-        //            "Shopping - Recuperación de Contraseña",
-        //            $"<h1>Shopping - Recuperación de Contraseña</h1>" +
-        //            $"Para recuperar la contraseña haga click en el siguiente enlace:" +
-        //            $"<p><a href = \"{link}\">Reset Password</a></p>");
-        //        _flashMessage.Info("Las instrucciones para recuperar la contraseña han sido enviadas a su correo.");
-        //        return RedirectToAction(nameof(Login));
-        //    }
+                string myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+                string link = Url.Action(
+                    "ResetPassword",
+                    "Account",
+                    new { token = myToken }, protocol: HttpContext.Request.Scheme);
+                _mailHelper.SendMail(
+                    $"{user.FullName}",
+                    model.Email,
+                    "Shopping - Recuperación de Contraseña",
+                    $"<h1>Shopping - Recuperación de Contraseña</h1>" +
+                    $"Para recuperar la contraseña haga click en el siguiente enlace:" +
+                    $"<p><a href = \"{link}\">Reset Password</a></p>");
+                _flashMessage.Info("Las instrucciones para recuperar la contraseña han sido enviadas a su correo.");
+                return RedirectToAction(nameof(Login));
+            }
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //public IActionResult ResetPassword(string token)
-        //{
-        //    return View();
-        //}
+        public IActionResult ResetPassword(string token)
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        //{
-        //    User user = await _userHelper.GetUserAsync(model.UserName);
-        //    if (user != null)
-        //    {
-        //        IdentityResult result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            _flashMessage.Info("Contraseña cambiada con éxito.");
-        //            return RedirectToAction(nameof(Login));
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            User user = await _userHelper.GetUserAsync(model.UserName);
+            if (user != null)
+            {
+                IdentityResult result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    _flashMessage.Info("Contraseña cambiada con éxito.");
+                    return RedirectToAction(nameof(Login));
 
-        //        }
+                }
 
-        //        _flashMessage.Danger("Error cambiando la contraseña.");
-        //        return View(model);
-        //    }
+                _flashMessage.Danger("Error cambiando la contraseña.");
+                return View(model);
+            }
 
-        //    _flashMessage.Danger("Usuario no encontrado.");
-        //    return View(model);
-        //}
+            _flashMessage.Danger("Usuario no encontrado.");
+            return View(model);
+        }
 
 
     }

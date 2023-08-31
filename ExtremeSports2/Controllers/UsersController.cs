@@ -1,10 +1,12 @@
-﻿using ExtremeSports2.Data;
+﻿using ExtremeSports2.Common;
+using ExtremeSports2.Data;
 using ExtremeSports2.Data.Entities;
 using ExtremeSports2.Enums;
 using ExtremeSports2.Helpers;
 using ExtremeSports2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 using Vereyon.Web;
 
 namespace ExtremeSports2.Controllers
@@ -16,15 +18,15 @@ namespace ExtremeSports2.Controllers
         private readonly IBlobHelper _blobHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IFlashMessage _flashMessage;
-        /*private readonly IMailHelper _mailHelper*/
+        private readonly IMailHelper _mailHelper;    
 
-        public UsersController(DataContext context, IUserHelper userHelper, IBlobHelper blobHelper, ICombosHelper combosHelper/*, IMailHelper mailHelper*/,IFlashMessage flashMessage)
+        public UsersController(DataContext context, IUserHelper userHelper, IBlobHelper blobHelper, ICombosHelper combosHelper, IMailHelper mailHelper, IFlashMessage flashMessage)
         {
             _context = context;
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _combosHelper = combosHelper;
-            //_mailHelper = mailHelper;
+            _mailHelper = mailHelper;
             _flashMessage = flashMessage;
         }
 
@@ -66,34 +68,36 @@ namespace ExtremeSports2.Controllers
                 User user = await _userHelper.AddUserAsync(model);
                 if (user == null)
                 {
-                    _flashMessage.Danger("Este correo ya está siendo usado.");
+                    ModelState.AddModelError(string.Empty, "Este correo ya está siendo usado.");
                     model.Countries = await _combosHelper.GetComboCountriesAsync();
                     model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
                     model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
                     return View(model);
                 }
-                //string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                //string tokenLink = Url.Action("ConfirmEmail", "Account", new
-                //{
-                //    userid = user.Id,
-                //    token = myToken
-                //}, protocol: HttpContext.Request.Scheme);
 
-                //Response response = _mailHelper.SendMail(
-                //    $"{model.FirstName} {model.LastName}",
-                //    model.Username,
-                //    "Shopping - Confirmación de Email",
-                //    $"<h1>Shopping - Confirmación de Email</h1>" +
-                //        $"Para habilitar el usuario por favor hacer click en el siguiente link:, " +
-                //        $"<hr/><br/><p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
-                //if (response.IsSuccess)
-                //{
-                //    _flashMessage.Info("Usuario registrado. Para poder ingresar al sistema, siga las instrucciones que han sido enviadas a su correo.");
-                //    return RedirectToAction(nameof(Login));
 
-                //}
 
-                //ModelState.AddModelError(string.Empty, response.Message);
+                string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                string tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken
+                }, protocol: HttpContext.Request.Scheme);
+
+                Response response = _mailHelper.SendMail(
+                    $"{model.FirstName} {model.LastName}",
+                    model.Username,
+                    "Shopping - Confirmación de Email",
+                    $"<h1>Shopping - Confirmación de Email</h1>" +
+                        $"Para habilitar el usuario por favor hacer click en el siguiente link:, " +
+                        $"<hr/><br/><p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
+                if (response.IsSuccess)
+                {
+                    _flashMessage.Info( "Las instrucciones para habilitar el administrador han sido enviadas al correo.");
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ModelState.AddModelError(string.Empty, response.Message);
 
 
             }
@@ -103,7 +107,6 @@ namespace ExtremeSports2.Controllers
             model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
             return View(model);
         }
-
         public JsonResult GetStates(int countryId)
         {
             if (countryId == 0)

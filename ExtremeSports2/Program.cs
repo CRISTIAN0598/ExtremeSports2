@@ -16,8 +16,8 @@ builder.Services.AddDbContext<DataContext>(o =>
 
 builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 {
-    //cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
-    //cfg.SignIn.RequireConfirmedEmail = true;
+    cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    cfg.SignIn.RequireConfirmedEmail = true;
     cfg.User.RequireUniqueEmail = true;
     cfg.Password.RequireDigit = false;  
     cfg.Password.RequiredUniqueChars = 0;
@@ -43,6 +43,7 @@ builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
+builder.Services.AddScoped<IMailHelper, MailHelper>();
 var app = builder.Build();
 
 SeedData(app);
