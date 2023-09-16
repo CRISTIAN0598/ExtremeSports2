@@ -181,7 +181,8 @@ divTrigger.addEventListener('click', () => {
 
 
 //Picture Preview
-const defaultFile ='https://localhost:7161/images/NoImage.jpg'
+const defaultFile = 'https://localhost:7161/images/NoImage.jpg'
+
 const file = document.getElementById('file');
 const img = document.getElementById('img');
 file.addEventListener('change', e => {

@@ -1,17 +1,4 @@
-﻿//const openModal = document.querySelector('.hero__cta');
-//const modal = document.querySelector('.modal2');
-////const closeModal = document.querySelector('.modal__close');
-
-//openModal.addEventListener('click', (e) => {
-//    e.preventDefault();
-//    modal.classList.add('modal--show');
-//});
-
-//closeModal.addEventListener('click', (e) => {
-//    e.preventDefault();
-//    modal.classList.remove('modal--show');
-//});
-
+﻿
 showInPopup = (url, title) => {
     $.ajax({
         type: 'GET',
@@ -20,6 +7,21 @@ showInPopup = (url, title) => {
             $('#form-modal .modal-body').html(res);
             $('#form-modal .modal-title').html(title);
             $('#form-modal').modal('show');
+
+            const file = document.getElementById('file');
+            const img = document.getElementById('img');
+            file.addEventListener('change', e => {
+                if (e.target.files[0]) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.src = e.target.result;
+                    }
+                    reader.readAsDataURL(e.target.files[0])
+                }
+                else {
+                    img.src = defaultFile;
+                }
+            })
 
         }
     })
@@ -40,12 +42,28 @@ jQueryAjaxPost = form => {
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
                     // reload the table         
+                    
                     location.reload()
+                   
 
                 }
                 else
 
                     $('#form-modal .modal-body').html(res.html);
+                const file = document.getElementById('file');
+                const img = document.getElementById('img');
+                file.addEventListener('change', e => {
+                    if (e.target.files[0]) {
+                        let reader = new FileReader();
+                        reader.onload = function (e) {
+                            img.src = e.target.result;
+                        }
+                        reader.readAsDataURL(e.target.files[0])
+                    }
+                    else {
+                        img.src = defaultFile;
+                    }
+                })
             },
             error: function (err) {
                 console.log(err)
@@ -106,3 +124,5 @@ jQueryAjaxPost = form => {
     soccerDeleteDialog.sc_deleteDialog = methods;
 
 })(window);
+
+
