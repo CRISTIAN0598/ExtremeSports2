@@ -26,5 +26,15 @@ namespace ExtremeSports2.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public float Stock { get; set; }
 
+        public Guid ImageId { get; set; }
+
+        [Display(Name = "Foto")]
+        public string ImageFullPath => ImageId == Guid.Empty
+           ? $"https://localhost:7161/images/NoImage.jpg"
+           : $"https://shoppingcristian.blob.core.windows.net/products/{ImageId}";
+
+        [Display(Name = "Image")]
+        public IFormFile? ImageFile { get; set; }
+
     }
 }

@@ -1,0 +1,105 @@
+﻿@model ExtremeSports2.Models.EditProductViewModel
+
+@{
+    ViewData["Title"] = "Producto";
+    Layout = null;
+}
+
+
+
+@*<div class="container smfont">
+    <form asp-action="Edit" enctype="multipart/form-data" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
+        <div class="box-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <partial name="_EditProduct" />
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+            <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
+        </div>
+    </form>
+</div>*@
+
+<link rel="stylesheet" href="~/css/Register.css" asp-append-version="true" />
+
+<section>
+    <flash dismissable="true" />
+    <div class="login-box login">
+
+        <form asp-action="Edit" enctype="multipart/form-data" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+         @*   <input type="hidden" asp-for="ImageId" />
+
+            <div class="container-img">
+                <figure>
+                    <img src="@Model.ImageFullPath" alt="" id="img" class="file-image">
+                </figure>
+
+                <input type="file" asp-for="ImageFile" id="file">
+                <label for="file" class="label-file"><i class="ri-camera-fill"></i></label>
+
+
+            </div>*@
+            <div class="form-container">
+
+                <div style="margin-right:40px;">
+                    <div class="input-box">
+
+                        <label asp-for="Name" class="label-login"></label>
+                        <input asp-for="Name" autocomplete="off" />
+                        <span asp-validation-for="Name" class="text-danger" style="margin-right: 190px;"></span>
+                    </div>
+
+                    <div class="input-box">
+
+
+                        <input asp-for="Description" autocomplete="off" />
+                        <label asp-for="Description" class="label-login"></label>
+                        <span asp-validation-for="Description" class="text-danger" style="margin-right: 170px;"></span>
+                    </div>
+                  @*  <div class="input-box">
+
+
+                        <select asp-for="CategoryId" asp-items="Model.Categories"></select>
+                        <label asp-for="CategoryId" class="label-login"></label>
+                        <span asp-validation-for="CategoryId" class="text-danger" style="margin-right: 190px;"></span>
+                    </div>*@
+                    <div class="input-box">
+
+
+                        <input asp-for="Price" autocomplete="off" />
+                        <label asp-for="Price" class="label-login"></label>
+                        <span asp-validation-for="Price" class="text-danger" style="margin-right: 170px;"></span>
+                    </div>
+                    <div class="input-box">
+
+
+                        <input asp-for="Stock" autocomplete="off" />
+                        <label asp-for="Stock" class="label-login"></label>
+                        <span asp-validation-for="Stock" class="text-danger" style="margin-right: 170px;"></span>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+            </div>
+
+            <button type="submit" class="btn-login" style="margin-bottom:40px;">Guardar</button>
+        </form>
+    </div>
+
+</section>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+   }

@@ -1,0 +1,37 @@
+﻿@model ExtremeSports2.Data.Entities.Product
+
+
+<div class="tableTwo">
+    <div class="table_sectionTwo">
+        <table class="tabletwo table-striped table-responsive-md table-bordered smfont" id="CategoriesTable">
+    <colgroup>
+        <col span="1" />
+        <col span="1" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCategories.FirstOrDefault().Category.Name)
+            </th>
+            <th>
+                        <button onclick="showInPopup('@Url.Action("AddCategory", "Products", new { Id = Model.Id }, Context.Request.Scheme)' , 'Nueva Categoría')" class="primary-button">Nueva categoría</button>
+                
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProductCategories)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                            <a title="Eliminar" data-id="@item.Id" class="icon_delete deleteItem2" data-bs-toggle="modal" data-bs-target="#deleteDialog"><i class="ri-delete-bin-2-fill"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    </div>
+</div>

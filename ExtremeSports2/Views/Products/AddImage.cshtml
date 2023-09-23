@@ -1,0 +1,54 @@
+﻿@model ExtremeSports2.Models.AddProductImageViewModel
+
+@{
+    ViewData["Title"] = "Producto";
+    Layout = null;
+}
+
+
+<link rel="stylesheet" href="~/css/Register.css" asp-append-version="true" />
+
+
+
+
+<section>
+   
+    <div class="login-box login">
+
+        <form asp-action="AddImage" enctype="multipart/form-data" asp-route-id="@Model.ProductId" onsubmit="return jQueryAjaxPost(this);">
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductId" />
+
+            <div class="container-img">
+                <figure>
+                    <img src="~/images/NoImage.jpg" alt="" id="img" class="file-image">
+                </figure>
+
+                <input type="file" asp-for="ImageFile" id="file">
+                <label for="file" class="label-file"><i class="ri-camera-fill"></i></label>
+
+
+            </div>
+            <div class="form-container">
+
+               
+
+
+            </div>
+
+            <button type="submit" class="btn-login" style="margin-bottom:40px;">Guardar</button>
+        </form>
+    </div>
+
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+

@@ -232,3 +232,27 @@ table.dataTable thead th, table.dataTable tfoot th {
     font-weight: 500;
     line-height: 1.2;
 }
+.containerTwoTable {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.tableTwo {
+    width: 50%;
+    font-family: 'Poppins';
+}
+.table_sectionTwo {
+    height: 650px;
+    overflow: auto;
+    width: 500px;
+}
+.table_sectionTwo table td{
+    height:100px;
+}
+.table_sectionTwo .tabletwo thead th {
+        width: 40px;
+    }
+.tabletwo {
+    width: 100%;
+    min-width: 0;
+}

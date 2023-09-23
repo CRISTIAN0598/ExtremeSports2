@@ -38,6 +38,7 @@ namespace ExtremeSports2.Data.Entities
         [Display(Name = "Fotos")]
         public int ImagesNumber => ProductImages == null ? 0 : ProductImages.Count;
 
+        public Guid ImageId { get; set; }
         //TODO: Pending to change to the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ProductImages == null || ProductImages.Count == 0

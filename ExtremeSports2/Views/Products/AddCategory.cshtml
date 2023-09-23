@@ -1,0 +1,64 @@
+﻿@model ExtremeSports2.Models.AddCategoryProductViewModel
+
+@{
+    ViewData["Title"] = "Producto";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/css/Register.css" asp-append-version="true" />
+<flash dismissable="true" />
+
+@*<div class="container smfont">
+    <form asp-action="AddCategory" enctype="multipart/form-data" autocomplete="off" asp-route-id="@Model.ProductId" onsubmit="return jQueryAjaxPost(this);">
+        <div class="box-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductId" />
+            <input type="hidden" asp-for="Categories" />
+            <div class="input-box">
+
+
+                <select asp-for="CategoryId" asp-items="Model.Categories"></select>
+                <label asp-for="CategoryId" class="label-login"></label>
+                <span asp-validation-for="CategoryId" class="text-danger" style="margin-right: 190px;"></span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+            <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
+        </div>
+    </form>
+</div>*@
+
+<section>
+
+    <div class="login-box login">
+
+        <form asp-action="AddCategory" enctype="multipart/form-data" asp-route-id="@Model.ProductId" onsubmit="return jQueryAjaxPost(this);">
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductId" />
+            <input type="hidden" asp-for="Categories" />
+
+            
+            <div class="form-container">
+                <div class="input-box">
+
+
+                    <select asp-for="CategoryId" asp-items="Model.Categories"></select>
+                    <label asp-for="CategoryId" class="label-login"></label>
+                    <span asp-validation-for="CategoryId" class="text-danger" style="margin-right: 190px;"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login" style="margin-bottom:40px;">Guardar</button>
+        </form>
+    </div>
+
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

@@ -1,0 +1,47 @@
+﻿@model ExtremeSports2.Data.Entities.Product
+<div class="container">
+
+
+
+    <!-- BreadCrumb -->
+    <div class="column">
+        <div class="products one">
+            <div class="flexwrap">
+                <div class="row">
+                    <div class="item">
+
+                        <div class="content" style="margin-top:0;">
+
+                            <div class="description collapse">
+                                <ul>
+                                    <li class="has-child expand">
+                                        <a href="#0" class="icon-small" style="border-top:none">Detalles</a>
+                                        <ul class="content">
+                                            <li><span>@Html.DisplayNameFor(model => model.Name)</span> <span>@Html.DisplayFor(model => model.Name)</span></li>
+                                            <li><span>@Html.DisplayNameFor(model => model.Description)</span> <span>@Html.DisplayFor(model => model.Description)</span></li>
+
+                                            <li><span>@Html.DisplayNameFor(model => model.Price)</span> <span>@Html.DisplayFor(model => model.Price)</span></li>
+                                            <li><span>@Html.DisplayNameFor(model => model.Stock)</span> <span>@Html.DisplayFor(model => model.Stock)</span></li>
+
+                                            <li><span>@Html.DisplayNameFor(model => model.CategoriesNumber)</span> <span>@Html.DisplayFor(model => model.CategoriesNumber)</span></li>
+                                            <li><span>@Html.DisplayNameFor(model => model.Stock)</span> <span>@Html.DisplayFor(model => model.Stock)</span></li>
+
+                                            <li><span>@Html.DisplayNameFor(model => model.ImagesNumber)</span> <span>@Html.DisplayFor(model => model.ImagesNumber)</span></li>
+                                       
+                                        </ul>
+
+                                    </li>
+
+
+                                </ul>
+                                <a asp-action="Index" class="secondary-button">Regresar</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -66,6 +66,7 @@ namespace ExtremeSports2.Controllers
                     Name = model.Name,
                     Price = model.Price,
                     Stock = model.Stock,
+                    ImageId = imageId,
                 };
 
                 product.ProductCategories = new List<ProductCategory>()
@@ -137,6 +138,7 @@ namespace ExtremeSports2.Controllers
                 Name = product.Name,
                 Price = product.Price,
                 Stock = product.Stock,
+                //ImageId=product.ImageId
             };
 
             return View(model);
@@ -150,17 +152,24 @@ namespace ExtremeSports2.Controllers
             {
                 return NotFound();
             }
-
+            
             try
             {
+                Guid imageId = model.ImageId;
+
+                if (model.ImageFile != null)
+                {
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
+                }
                 Product product = await _context.Products.FindAsync(model.Id);
                 product.Description = model.Description;
                 product.Name = model.Name;
                 product.Price = model.Price;
                 product.Stock = model.Stock;
+                //product.ImageId = model.ImageId;
                 _context.Update(product);
                 await _context.SaveChangesAsync();
-                _flashMessage.Confirmation("Registro actualizado.");
+                _flashMessage.Info("Registro actualizado.");
                 return Json(new
                 {
                     isValid = true,
@@ -347,7 +356,7 @@ namespace ExtremeSports2.Controllers
                 {
                     _context.Add(productCategory);
                     await _context.SaveChangesAsync();
-                    _flashMessage.Confirmation("Categoria agregada.");
+                    _flashMessage.Info("Categoria agregada.");
                     return Json(new
                     {
                         isValid = true,
