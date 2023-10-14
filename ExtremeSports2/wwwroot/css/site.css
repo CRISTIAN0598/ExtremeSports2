@@ -2878,7 +2878,11 @@ B. Head & products block
     /*Products*/
     .trending .products,
     .product-categories .row {
-        flex: 0 0 33.3333%;
+        /*    flex: 0 0 33.3333%;*/
+        flex: 20 0 33.3333%;
+        flex-wrap: wrap;
+        display: flex;
+        justify-content: space-between;
     }
 
     .products.big .media {

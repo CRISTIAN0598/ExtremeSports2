@@ -198,6 +198,35 @@ namespace ExtremeSports2.Migrations
                     b.ToTable("States");
                 });
 
+            modelBuilder.Entity("ExtremeSports2.Data.Entities.TemporalSale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TemporalSales");
+                });
+
             modelBuilder.Entity("ExtremeSports2.Data.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -467,6 +496,21 @@ namespace ExtremeSports2.Migrations
                         .HasForeignKey("CountryId");
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("ExtremeSports2.Data.Entities.TemporalSale", b =>
+                {
+                    b.HasOne("ExtremeSports2.Data.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("ExtremeSports2.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ExtremeSports2.Data.Entities.User", b =>
